@@ -3,20 +3,29 @@ import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import * as dotenv from "dotenv";
-import { createPineconeIndex } from "./createPineconeIndex.js";
 import { updatePinecone } from "./updatePinecone.js";
 import { queryPineconeVectorStoreAndQueryLLM } from "./queryPineconeAndQueryGPT.js";
+import { createPineconeIndex } from "./createPineConeIndex.js";
 import path from "path";
 
 dotenv.config();
 
-const loader = new DirectoryLoader("./file-to-read", {
-    ".json": (path) => new TextLoader(path)
-}); 
+console.log("Starting...");
+let docs = [];
+try {
+    const loader = new DirectoryLoader("./file-to-read", {
+        ".json": (path) => new TextLoader(path)
+    }); 
+    docs = await loader.load();
+    
+} catch (err) {
+    console.log(err);
+}
+console.log("Finished loading documents");
 
-const docs = await loader.load();
 
-const question = "What is the test stack this project uses?";
+
+const question = "Tell me all the dependencies related to tests that this project has";
 const indexName = "read-index";
 const VectorDimension = 1536; // OpenAI embeddings model has 1536 dimensions
 
@@ -27,7 +36,8 @@ await client.init({
 });
 
 (async () => {
+    console.log("Starting...");
     await createPineconeIndex(client, indexName, VectorDimension);
     await updatePinecone(client, indexName, docs);
     await queryPineconeVectorStoreAndQueryLLM(client, indexName, question);
-})
+})();
