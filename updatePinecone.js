@@ -33,13 +33,13 @@ export const updatePinecone = async (client, indexName, docs) => {
       `Creating ${chunks.length} vectors array with id, values, and metadata...`
     );
 // 9. Create and upsert vectors in batches of 100
-    const batchSize = 100;
+    const batchSize = 100; // optimal number of batches to upload
     let batch = [];
     for (let idx = 0; idx < chunks.length; idx++) {
       const chunk = chunks[idx];
       const vector = {
         id: `${txtPath}_${idx}`,
-        values: embeddingsArrays[idx],
+        values: embeddingsArrays[idx], // numerical representation of each chunk of text
         metadata: {
           ...chunk.metadata,
           loc: JSON.stringify(chunk.metadata.loc),

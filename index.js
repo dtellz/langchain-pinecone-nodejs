@@ -3,9 +3,9 @@ import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import * as dotenv from "dotenv";
-import { createPineconeIndex } from "./1-createPineconeIndex.js";
-import { updatePinecone } from "./2-updatePinecone.js";
-import { queryPineconeVectorStoreAndQueryLLM } from "./3-queryPineconeAndQueryGPT.js";
+import { createPineconeIndex } from "./createPineconeIndex.js";
+import { updatePinecone } from "./updatePinecone.js";
+import { queryPineconeVectorStoreAndQueryLLM } from "./queryPineconeAndQueryGPT.js";
 import path from "path";
 
 dotenv.config();
